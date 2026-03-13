@@ -1,6 +1,6 @@
 ﻿# Spotify Listening Analytics Pipeline (2026)
 
-This project builds a production-style analytics pipeline for personal Spotify listening data. It is designed as a learning project and a final capstone, so each phase will explain what we build and why it matters in real-world data engineering.
+This project builds a production-style analytics pipeline for personal Spotify listening data. Each phase will explain what i build and why it matters in real-world data engineering.
 
 ## Architecture (Logical Flow)
 Spotify Web API
