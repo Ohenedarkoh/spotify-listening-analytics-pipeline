@@ -4,3 +4,7 @@ config.yaml
 configs/
 slap.json
 state/
+logs/
+dbt/profiles.yml
+dbt/.user.yml
+dbt/spotify_analytics/target

@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: spotify_raw
+    database: new-project-19180
+    schema: spotify_pipeline
+    tables:
+      - name: listening_history_raw
