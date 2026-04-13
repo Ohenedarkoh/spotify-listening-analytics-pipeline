@@ -4,6 +4,9 @@ from pathlib import Path
 import yaml
 from google.cloud import bigquery
 
+from google.api_core.exceptions import NotFound
+
+
 
 def load_config():
     # Single source of truth for project + dataset
@@ -29,6 +32,13 @@ def main():
     client = bigquery.Client(project=project_id)
     table_id = f"{project_id}.{dataset}.listening_history_raw"
 
+    try:
+        client.get_table(table_id)
+        table_exists = True
+    except NotFound:
+        table_exists = False
+
+
     local_raw = Path(config["raw_output"]["base_path"])
     rows = load_recently_played_json(local_raw)
 
@@ -37,17 +47,28 @@ def main():
         return
 
         # Raw layer: append-only, allow schema growth
-    job_config = bigquery.LoadJobConfig(
-        source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
-        write_disposition="WRITE_APPEND",
-        autodetect=True,
-        schema_update_options=[bigquery.SchemaUpdateOption.ALLOW_FIELD_ADDITION],
-    )
+    if table_exists:
+        # Use existing schema; avoid autodetect mismatch
+        job_config = bigquery.LoadJobConfig(
+            write_disposition="WRITE_APPEND",
+        )
+    else:
+        # Create table with inferred schema
+        job_config = bigquery.LoadJobConfig(
+            source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
+            write_disposition="WRITE_APPEND",
+            autodetect=True,
+            schema_update_options=[bigquery.SchemaUpdateOption.ALLOW_FIELD_ADDITION],
+        )
+
+
 
     load_job = client.load_table_from_json(rows, table_id, job_config=job_config)
     load_job.result()
 
     print(f"Loaded {len(rows)} rows into {table_id}")
+
+    
 
 
 
