@@ -1,7 +1,6 @@
 data/
 .env
-config.yaml
-configs/
+.env_encoded
 slap.json
 state/
 logs/

@@ -1,0 +1,6 @@
+project_id        = "new-project-19180"
+gcs_bucket_name   = "slap12-17"
+gcs_location      = "US"
+bq_location       = "US"
+raw_dataset_id    = "spotify_pipeline"
+analytics_dataset_id = "spotify_analytics"
