@@ -1,0 +1,38 @@
+spotify:
+ # OAuth scopes define which personal data the API can access
+  scopes:
+    - user-read-recently-played
+
+raw_output:
+  # Local raw data landing zone (mirrors future GCS partitioning)
+  base_path: data/raw
+  partition_format: year=%Y/month=%m/day=%d
+
+
+gcp:
+    #gcp project that owns GCS and BigQuery
+
+  project_id: new-project-19180
+
+    # raw data bucket(immutable json)
+  gcs_bucket: slap12-17
+
+  gcs_location: US 
+
+    # raw bigquery dataset
+  bq_dataset: spotify_pipeline
+
+  bq_location: US 
+
+raw_output:
+ #local raw landing zone (mirrors gcs prefix)
+
+  base_path: data/raw
+  partition_format: year=%Y/month=%m/day=%d
+
+
+
+incremental:
+  #local state for last seen play time (ms since epoch)
+
+  watermark_path: state/watermark.json
