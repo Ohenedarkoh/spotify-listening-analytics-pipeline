@@ -59,15 +59,16 @@ tasks:
 
       - id: dbt_run
         type: io.kestra.plugin.scripts.shell.Commands
-        containerImage: python:3.11
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.11.latest
         inputFiles:
           gcp_key.json: "{{ secret('GCP_SA_KEY_JSON') }}"
-        beforeCommands:
-          - "pip install -r requirements.txt"
-          - "pip install dbt-bigquery"
-          - "printf 'spotify_analytics:\\n  target: dev\\n  outputs:\\n    dev:\\n      type: bigquery\\n      method: service-account\\n      project: new-project-19180\\n      dataset: spotify_analytics\\n      keyfile: gcp_key.json\\n      threads: 2\\n      timeout_seconds: 300\\n      location: US\\n' > /tmp/profiles.yml"
         commands:
+          - "printf 'spotify_analytics:\\n  target: dev\\n  outputs:\\n    dev:\\n      type: bigquery\\n      method: service-account\\n      project: new-project-19180\\n      dataset: spotify_analytics\\n      keyfile: gcp_key.json\\n      threads: 2\\n      timeout_seconds: 300\\n      location: US\\n' > /tmp/profiles.yml"
           - "dbt run --project-dir dbt/spotify_analytics --profiles-dir /tmp"
           - "dbt test --project-dir dbt/spotify_analytics --profiles-dir /tmp"
         env:
           GOOGLE_APPLICATION_CREDENTIALS: "gcp_key.json"
+        retry:
+          type: constant
+          interval: PT2M
+          maxAttempt: 3
