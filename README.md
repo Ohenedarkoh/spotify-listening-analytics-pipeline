@@ -189,7 +189,7 @@ dbt test --project-dir dbt/spotify_analytics --profiles-dir dbt
 5. Keep cron trigger enabled for daily runs.
 ```
 
-### 8. Verification Checks
+### 9. Verification Checks
 ```
 After a successful run, verify:
 - New files in GCS raw prefix
@@ -202,10 +202,27 @@ After a successful run, verify:
   - `dim_time`
 ```
 
-### 9. Common Troubleshooting
+### 10. Common Troubleshooting
 ```
 - `profiles.yml not found`: run dbt with `--profiles-dir dbt`
 - `GOOGLE_APPLICATION_CREDENTIALS not found`: check key path or secret injection
 - BigQuery schema mismatch: align loader schema with existing table schema before append
 - Kestra save error (`Flow must not be empty`): validate YAML indentation and namespace
 ```
+
+## Dashboard (Looker Studio)
+
+Live dashboard:  
+[Spotify Listening Analytics Dashboard](https://datastudio.google.com/reporting/80785454-764c-48ab-839d-c35b602364a2)
+
+### What it shows
+- Total Plays
+- Top artists for the selected period
+- Average daily plays
+- Unique tracks played
+- Unique artists played
+- Daily listening activity
+- Listening by hour of day
+
+### Screenshot
+![Looker Studio Dashboard](docs/images/SLAP.png)
